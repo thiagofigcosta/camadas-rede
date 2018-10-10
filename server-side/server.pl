@@ -7,6 +7,7 @@ use threads;
 use warnings;
 use IO::Socket::INET;
 use Time::HiRes ('sleep');
+use Try::Tiny;
 use Net::Address::IP::Local; # eh necessario instalar esse modulo a partir do cpan
 
 
@@ -60,7 +61,8 @@ if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /
 my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
-my $cmac = `getmac`;
+my $cmac = "mac";
+# $cmac = `getmac`; # TODO FIX
 if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
 	$cmac = $1;
 }
@@ -78,13 +80,15 @@ my $pre_pdu = $preambulo_bin.$start_frame_bin.$mac_bin.$cmac_bin.$length_bin;
 print "Running...\n";
 while(1){
 	######### espera uma mensagem do controller (posicao do mouse)
-	$freceive_bin = <$socket>;
+	$freceive_bin = <$clientsocket>;
 	if(defined $freceive_bin){
+		print "[DEBUG] Posicao do mouse recebida da camada fisica\n";
 		$freceive = sprintf pack("b*",$freceive_bin); # converte para string
 		$freceive_data = substr $freceive , 117; # extrai da mensagem o conteudo efetivo
 		open($f_receive, '>', $file_master) or die "Não foi possível abrir o arquivo '$file_master' $!";
 		print $f_receive $freceive_data;
 		close $f_receive;
+		print "[DEBUG] Arquivo com posicao do mouse salvo para a camada de aplicação\n";
 	}
 
 	######### le mensagem da camada de cima (tela)
@@ -95,6 +99,7 @@ while(1){
 			$fsend_data = <$f_send>;
 			close $f_send;
 			$tryopenfile=0;
+			print "[DEBUG] Arquivo com a tela lido da camada de aplicação\n";
 			unlink $file_slave; #deleta o arquivo
 		} catch {
 		};
@@ -103,6 +108,7 @@ while(1){
 	$fsend_data_bin = $pre_pdu.$fsend_data_bin; # concatena o os campos da pdu
 	my $thread_1 = threads->create(\&send_message,$clientsocket,$fsend_data_bin) or die "Erro no envio"; #envia o quadro
 	$thread_1->join();
+	print "[DEBUG] Tela enviada enviada para camada fisica\n";
 }
 $socket->close();
 print "Bye!\n";

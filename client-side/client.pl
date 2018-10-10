@@ -6,9 +6,9 @@ use strict;
 use threads;
 use warnings;
 use IO::Socket::INET;
-use Try::Tiny;
 use Time::HiRes ('sleep');
-
+use Try::Tiny;
+use Net::Address::IP::Local; # eh necessario instalar esse modulo a partir do cpan
 
 ######### declara variaveis
 my ($socket,$serverdata,$clientdata);
@@ -34,7 +34,7 @@ while($tryopenfile){
 		$data_fsend = <$f_send>;
 		close $f_send;
 		$tryopenfile=0;
-		print "[DEBUG] Arquivo com posicao do mouse lido da camada de aplicação\n";
+		print "[DEBUG] Arquivo a com posicao do mouse lido da camada de aplicação\n";
 		unlink $file_master; #deleta o arquivo
 	} catch {
 	};
@@ -75,7 +75,8 @@ if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /
 my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
-my $cmac = `getmac`;
+my $cmac = "mac";
+# $cmac = `getmac`; # TODO FIX
 if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
 	$cmac = $1;
 }
@@ -97,18 +98,18 @@ while(1){
 	$fsend_data_bin = $pre_pdu.$fsend_data_bin; # concatena o os campos da pdu
 	my $thread_1 = threads->create(\&send_message,$socket,$fsend_data_bin) or die "Erro no envio"; #envia o quadro
 	$thread_1->join();
-	print "[DEBUG] Posição do mouse enviada\n";
+	print "[DEBUG] Posição do mouse enviada para camada fisica\n";
 
 	######### espera uma mensagem do controlled (tela)
 	$freceive_bin = <$socket>;
 	if(defined $freceive_bin){
-		print "[DEBUG] Imagem recebida\n";
+		print "[DEBUG] Imagem recebida da camada fisica\n";
 		$freceive = sprintf pack("b*",$freceive_bin); # converte para string
 		$freceive_data = substr $freceive , 117; # extrai da mensagem o conteudo efetivo
 		open($f_receive, '>', $file_slave) or die "Não foi possível abrir o arquivo '$file_slave' $!";
 		print $f_receive $freceive_data;
 		close $f_receive;
-		print "[DEBUG] Arquivo com tela salvo para a camada de aplicação\n";
+		print "[DEBUG] Arquivo com a tela salvo para a camada de aplicação\n";
 	}
 
 	######### le mensagem da camada de cima (posicao do mouse)
@@ -119,7 +120,7 @@ while(1){
 			$data_fsend = <$f_send>;
 			close $f_send;
 			$tryopenfile=0;
-			print "[DEBUG] Arquivo com posicao do mouse lido da camada de aplicação\n";
+			print "[DEBUG] Arquivo com a posicao do mouse lido da camada de aplicação\n";
 			unlink $file_master; #deleta o arquivo
 		} catch {
 		};

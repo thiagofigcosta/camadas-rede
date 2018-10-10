@@ -32,7 +32,7 @@ while True:
 	with io.BytesIO() as output:
 		img.save(output, format="PNG")
 		img_str = base64.b64encode(output.getvalue())
-	data=DST_TP+chr(30)+img_str
+	data=img_str
 
 	file = open("message_slave.txt", "wb")
 	file.write(data)
