@@ -61,7 +61,7 @@ if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /
 my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
-my $cmac = "mac";
+my $cmac = "xxxxxx";
 # $cmac = `getmac`; # TODO FIX
 if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
 	$cmac = $1;
