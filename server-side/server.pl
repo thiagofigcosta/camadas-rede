@@ -61,10 +61,16 @@ if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /
 my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
-my $cmac = "xxxxxx";
-# $cmac = `getmac`; # TODO FIX
-if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
-	$cmac = $1;
+my $so =  "$^O\n";
+if(index($so, "linux") != -1) {
+    my $cmac = substr `cat /sys/class/net/*/address`,0,17;
+}elsif(index($so,"Win") != -1){
+    my $cmac = `getmac`;
+	if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
+		$cmac = $1;
+	}
+}else{
+	$cmac = "00:00:00:00:00:00";
 }
 my $cmac_bin = sprintf unpack("b*",$cmac );
 
