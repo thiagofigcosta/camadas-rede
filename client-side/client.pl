@@ -30,12 +30,14 @@ my $f_send;
 $tryopenfile = 1;
 while($tryopenfile){
 	try {
-		open($f_send, '<:encoding(UTF-8)', $file_master) or die "Nao foi possivel abrir o arquivo '$file_master' $!";
+		open($f_send, '<:encoding(UTF-8)', $first_file) or die "Nao foi possivel abrir o arquivo '$first_file' $!";
 		$data_fsend = <$f_send>;
 		close $f_send;
-		$tryopenfile=0;
-		print "[DEBUG] Arquivo a com posicao do mouse lido da camada de aplicação\n";
-		unlink $file_master; #deleta o arquivo
+		if(defined $data_fsend){
+			$tryopenfile=0;
+			print "[DEBUG] Arquivo a com IP do servidor lido da camada de aplicação\n";
+			unlink $first_file; #deleta o arquivo
+		}
 	} catch {
 	};
 }
@@ -76,10 +78,11 @@ my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
 my $so =  "$^O\n";
+my $cmac;
 if(index($so, "linux") != -1) {
-    my $cmac = substr `cat /sys/class/net/*/address`,0,17;
+    $cmac = substr `cat /sys/class/net/*/address`,0,17;
 }elsif(index($so,"Win") != -1){
-    my $cmac = `getmac`;
+    $cmac = `getmac`;
 	if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
 		$cmac = $1;
 	}
@@ -159,12 +162,3 @@ sub send_message{
 
 
 
-# # FORMA MAIS SEGURA DE LIDAR COM AS StrINGS
-# my @fsend_fields = split($separator, $data_fsend);
-
-# if (@fsend_fields==5){
-# my @serverfulladdr = split(':', $fsend_fields[0]);
-# if (@serverfulladdr==2){
-
-# 	}
-# }

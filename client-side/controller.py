@@ -60,7 +60,7 @@ while True:
 	mousex,mousey= pyautogui.position()
 
 	data=DESIRED_IP+':'+DEFAULTAPP_PORT+chr(30)+str(sizex)+chr(30)+str(sizey)+chr(30)+str(mousex)+chr(30)+str(mousey)
-
+	data=str.encode(data)
 	
 	file = open("message_master.txt", "wb")
 	file.write(data)
@@ -70,6 +70,7 @@ while True:
 		try:
 			file = open("message_slave.txt", "r")
 			img_str=file.read()
+			
 			file.close()
 			break
 		except:
@@ -79,7 +80,7 @@ while True:
 	except:
 		pass
 
-
+	print("img_str : "+img_str)
 	img_str=img_str.decode('base64')
 	img=Image.open(io.BytesIO(img_str))
 	showPIL(img)

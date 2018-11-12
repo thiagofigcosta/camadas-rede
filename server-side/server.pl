@@ -62,10 +62,11 @@ my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
 my $so =  "$^O\n";
+my $cmac;
 if(index($so, "linux") != -1) {
-    my $cmac = substr `cat /sys/class/net/*/address`,0,17;
+    $cmac = substr `cat /sys/class/net/*/address`,0,17;
 }elsif(index($so,"Win") != -1){
-    my $cmac = `getmac`;
+    $cmac = `getmac`;
 	if($cmac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
 		$cmac = $1;
 	}
