@@ -34,6 +34,7 @@ my $fsend_data_bin;
 
 ######### cria o socket, com possibilidade de apenas um cliente conectado (Reuse eh 1 pois o socket pode ser reutilizavel)
 my $address;
+my $so =  "$^O\n";
 if(index($so, "linux") != -1) {
     $address = eval{Net::Address::IP::Local->public_ipv4}; #descobre o ip da maquina servidor
 }elsif(index($so,"Win") != -1){
@@ -68,7 +69,7 @@ if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /
 my $mac_bin = sprintf unpack("b*",$mac);
 
 # mac do remetente = 6 bytes
-my $so =  "$^O\n";
+$so =  "$^O\n";
 my $cmac;
 if(index($so, "linux") != -1) {
     $cmac = substr `cat /sys/class/net/*/address`,0,17;
