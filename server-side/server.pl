@@ -41,7 +41,6 @@ if(index($so, "linux") != -1) {
 }else{
 	$address = "";
 }
-my $address = eval{Net::Address::IP::Local->public_ipv4}; #descobre o ip da maquina servidor
 print "Starting server [ip:".$address." port:".$port."]...\n";
 $socket = new IO::Socket::INET ( 
 	LocalHost => $address,
