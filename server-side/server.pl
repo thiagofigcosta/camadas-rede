@@ -33,6 +33,14 @@ my $fsend_data;
 my $fsend_data_bin;
 
 ######### cria o socket, com possibilidade de apenas um cliente conectado (Reuse eh 1 pois o socket pode ser reutilizavel)
+my $address;
+if(index($so, "linux") != -1) {
+    $address = eval{Net::Address::IP::Local->public_ipv4}; #descobre o ip da maquina servidor
+}elsif(index($so,"Win") != -1){
+	$address = Net::Address::IP::Local->public;
+}else{
+	$address = "";
+}
 my $address = eval{Net::Address::IP::Local->public_ipv4}; #descobre o ip da maquina servidor
 print "Starting server [ip:".$address." port:".$port."]...\n";
 $socket = new IO::Socket::INET ( 
