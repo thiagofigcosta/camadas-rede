@@ -6,7 +6,7 @@ use strict;
 use threads;
 use warnings;
 use IO::Socket::INET;
-use Time::HiRes ('sleep');
+use Time::HiRes('sleep');
 use Try::Tiny;
 use Net::Address::IP::Local; # eh necessario instalar esse modulo a partir do cpan
 
@@ -42,6 +42,7 @@ if(index($so, "linux") != -1) {
 }else{
 	$address = "";
 }
+
 print "Starting server [ip:".$address." port:".$port."]...\n";
 $socket = new IO::Socket::INET ( 
 	LocalHost => $address,

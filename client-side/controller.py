@@ -47,6 +47,7 @@ def showPIL(pilImage):
 	imagesprite = canvas.create_image(screenx/2,screeny/2,image=image)
 	root.mainloop()
 
+
 def shutdown(signal,frame):
 	print("\nbye\n")
 	exit()

@@ -1,17 +1,20 @@
 #!/usr/bin/perl
 
-######### includes
+##includes
 use 5.010;
 use strict;
 use threads;
 use warnings;
 use IO::Socket::INET;
-use Time::HiRes ('sleep');
+use Time::HiRes('sleep');
+use bytes;
 use Try::Tiny;
-use Net::Address::IP::Local; # eh necessario instalar esse modulo a partir do cpan
+use Net::Address::IP::Local; 
 
 ######### declara variaveis
-my ($socket,$serverdata,$clientdata);
+my $socket;
+my $serverdata;
+my $clientdata;
 
 my $first_file = "message_master.txt";
 my $file_master = "message_master.txt";
@@ -26,20 +29,18 @@ my $freceive_data;
 my $data_fsend;
 my $f_send;
 
+print "[DEBUG:CAMADA FISICA]Iniciando\n";
 ######### le mensagem da camada de cima (IP do servidor)
 $tryopenfile = 1;
 while($tryopenfile){
-	try {
-		open($f_send, '<:encoding(UTF-8)', $first_file) or die "Nao foi possivel abrir o arquivo '$first_file' $!";
-		$data_fsend = <$f_send>;
-		close $f_send;
-		if(defined $data_fsend){
-			$tryopenfile=0;
-			print "[DEBUG] Arquivo a com IP do servidor lido da camada de aplicação\n";
-			unlink $first_file; #deleta o arquivo
-		}
-	} catch {
-	};
+	open($f_send, '<:encoding(UTF-8)', $first_file) or die "[ERRO]Nao foi possivel abrir o arquivo '$first_file' $!";
+	$data_fsend = <$f_send>;
+	close $f_send;
+	if(defined $data_fsend){
+		$tryopenfile=0;
+		print "[DEBUG:CAMADA FISICA]Arquivo a com IP do servidor lido da camada de aplicação\n";
+		unlink $first_file; #deleta o arquivo
+	}
 }
 
 my $offset = index($data_fsend,$separator) + length($separator);
@@ -48,17 +49,18 @@ my $fsend_data = substr($data_fsend,$offset);
 my $fsend_data_bin = sprintf unpack("b*",$fsend_data);# converte a mensagem para binario
 
 my @serverfulladdr = split(':', $fsend_serverinfo);
-my $serveraddr = $serverfulladdr[0];
-my $serverport = $serverfulladdr[1];
+#my $serveraddr = $serverfulladdr[0];
+my $serveraddr ="200.131.37.230" ;
+my $serverport = "7878";
 
 ########## cria socket
-print "Connecting on server [ip:".$serveraddr." port:".$serverport."]...\n";
+print "[DEBUG:CAMADA FISICA]Connecting on server [ip:".$serveraddr." port:".$serverport."]...\n";
 $socket = new IO::Socket::INET (
 	PeerHost => $serveraddr,
 	PeerPort => $serverport,
 	Proto    => 'tcp'        
-) or die "Erro : $!\n";
-
+) or die "[Erro]$!\n";
+print "[DEBUG:CAMADA FISICA]Connected on server [ip:".$serveraddr." port:".$serverport."]...\n";
 
 ##########  cria PDU
 # preambulo da pdu = 7 bytes
@@ -91,9 +93,7 @@ if(index($so, "linux") != -1) {
 }
 my $cmac_bin = sprintf unpack("b*",$cmac );
 
-# dado a ser enviado tera 46 bytes
-# tamanho do quadro
-# 7 + 1 + 6 + 6 + 46 = 66 bytes
+# tamanho do segmento
 my $length = '00000000‭01000010';
 my $length_bin = sprintf unpack("b*",$length );
 
@@ -101,35 +101,35 @@ my $pre_pdu = $preambulo_bin.$start_frame_bin.$mac_bin.$cmac_bin.$length_bin;
 
 
 ######### loop
-print "Running...\n";
+print "[DEBUG:CAMADA FISICA]Running...\n";
 while(1){
 	# TODO corrigir aqui
 	$fsend_data_bin = $pre_pdu.$fsend_data_bin; # concatena o os campos da pdu
 	my $thread_1 = threads->create(\&send_message,$socket,$fsend_data_bin) or die "Erro no envio"; #envia o quadro
 	$thread_1->join();
-	print "[DEBUG] Posição do mouse enviada para camada fisica\n";
+	print "[DEBUG:CAMADA FISICA]Posição do mouse enviada para camada fisica\n";
 
 	######### espera uma mensagem do controlled (tela)
 	$freceive_bin = <$socket>;
 	if(defined $freceive_bin){
-		print "[DEBUG] Imagem recebida da camada fisica\n";
+		print "[DEBUG:CAMADA FISICA]Imagem recebida da camada fisica\n";
 		$freceive = sprintf pack("b*",$freceive_bin); # converte para string
 		$freceive_data = substr $freceive , 117; # extrai da mensagem o conteudo efetivo
 		open($f_receive, '>', $file_slave) or die "Não foi possível abrir o arquivo '$file_slave' $!";
 		print $f_receive $freceive_data;
 		close $f_receive;
-		print "[DEBUG] Arquivo com a tela salvo para a camada de aplicação\n";
+		print "[DEBUG:CAMADA FISICA]Arquivo com a tela salvo para a camada de aplicação\n";
 	}
 
-	######### le mensagem da camada de cima (posicao do mouse)
+	######### le mensagem da camada superior (posicao do mouse)
 	$tryopenfile=1;
 	while($tryopenfile){
 		try {
-			open($f_send, '<:encoding(UTF-8)', $file_master) or die "Nao foi possivel abrir o arquivo '$file_master' $!";
+			open($f_send, '<:encoding(UTF-8)', $file_master) or die "[ERRO]Nao foi possivel abrir o arquivo '$file_master' $!";
 			$data_fsend = <$f_send>;
 			close $f_send;
 			$tryopenfile=0;
-			print "[DEBUG] Arquivo com a posicao do mouse lido da camada de aplicação\n";
+			print "[DEBUG:CAMADA FISICA]Arquivo com a posicao do mouse lido da camada de aplicação\n";
 			unlink $file_master; #deleta o arquivo
 		} catch {
 		};
