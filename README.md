@@ -5,10 +5,10 @@
 Implementacao da Camada de Transporte  do Trabalho Prático de Redes 1 - CEFET-MG
 
   - Integrantes do grupo:
-    + Marcos Henriques
-    + Pedro Cordeiro
-    + Bernard
-    + Thiago
+    + Marcos Tiago Ferreira Henriques marcostiagofh@gmail.com
+    + Bernard Menezes Moreira da Costa bernard.menezes98@gmail.com
+    + Thiago Figueiredo Costa thiagofigcosta@hotmail.com
+    + Pedro Henrique Cordeiro de Jesus pedro.henrique.cefetmg@gmail.com
 
 O Enunciado está neste __[link.](https://docs.google.com/document/d/1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A/edit)__
 O relatório a ser preenchido está neste __[link.](https://docs.google.com/document/d/1Jkdm1ab7stzki03h5Mim50l1egjnSPyiNFp3CbYJx2A/edit?usp=sharing)__
