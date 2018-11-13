@@ -33,29 +33,6 @@ ___
 ## Uso do Código
 
 
-### Camada Física
-Instale a linguagem `perl`
-
-Instale os pacotes necessários, através dos comandos:
-
-    cpan
-    install IO::Socket::INET
-    install Time::HiRes
-    install Net::Address::IP::Local
-
-
-Na máquina que será o servidor, rode o script "server.pl"
-
-```
-perl server.pl
-```
-
-Na máquina que será o cliente, rode o script "client.pl"
-
-```
-perl client.pl
-```
-
 ### Camada de aplicação
 Instale a linguagem `python` (versão 2.7) e os pacotes necessários, através dos comandos:
 
@@ -77,6 +54,30 @@ Na máquina que irá controlar, rode o script "controller.py"
 
 ```
 python controller.py
+```
+
+
+### Camada Física
+Instale a linguagem `perl`
+
+Instale os pacotes necessários, através dos comandos:
+
+    cpan
+    install IO::Socket::INET
+    install Time::HiRes
+    install Net::Address::IP::Local
+
+
+Na máquina que será o servidor, rode o script "server.pl"
+
+```
+perl server.pl
+```
+
+Na máquina que será o cliente, rode o script "client.pl"
+
+```
+perl client.pl
 ```
 
 
