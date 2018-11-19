@@ -40,7 +40,7 @@ if(index($so, "linux") != -1) {
 }elsif(index($so,"Win") != -1){
 	$address = Net::Address::IP::Local->public;
 }else{
-	$address = "";
+	$address = "127.0.0.1";
 }
 
 print "Starting server [ip:".$address." port:".$port."]...\n";

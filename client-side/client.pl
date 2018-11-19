@@ -16,9 +16,9 @@ my $socket;
 my $serverdata;
 my $clientdata;
 
-my $first_file = "message_master.txt";
-my $file_master = "message_master.txt";
-my $file_slave = "message_slave.txt";
+my $first_file = "../message_master.txt";
+my $file_master = "../message_master.txt";
+my $file_slave = "../message_slave.txt";
 
 my $separator = chr(30);
 my $tryopenfile;
@@ -50,7 +50,7 @@ my $fsend_data_bin = sprintf unpack("b*",$fsend_data);# converte a mensagem para
 
 my @serverfulladdr = split(':', $fsend_serverinfo);
 #my $serveraddr = $serverfulladdr[0];
-my $serveraddr ="200.131.37.230" ;
+my $serveraddr ="127.0.0.1" ;
 my $serverport = "7878";
 
 ########## cria socket

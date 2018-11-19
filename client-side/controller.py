@@ -17,7 +17,8 @@ from PIL import Image, ImageTk
 
 
 FRAMESPERSECOND=30
-DESIRED_IP="192.168.254.70"
+MY_IP="192.168.56.1"
+DESIRED_IP="192.168.56.1"
 DEFAULTAPP_PORT="7878"
 
 
@@ -60,10 +61,10 @@ while True:
 	sizex, sizey = getScreenSize(screenx, screeny)
 	mousex,mousey= pyautogui.position()
 
-	data=DESIRED_IP+':'+DEFAULTAPP_PORT+chr(30)+str(sizex)+chr(30)+str(sizey)+chr(30)+str(mousex)+chr(30)+str(mousey)
+	data=MY_IP+chr(30)+DESIRED_IP+':'+DEFAULTAPP_PORT+chr(30)+str(sizex)+chr(30)+str(sizey)+chr(30)+str(mousex)+chr(30)+str(mousey)
 	data=str.encode(data)
 	
-	file = open("message_master.txt", "wb")
+	file = open("../message_master.txt", "wb")
 	file.write(data)
 	file.close()
 
