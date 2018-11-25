@@ -1,9 +1,16 @@
-var fs = require('fs');
-var net = require('net');
+var tools = require('../modules_js/modules.js');
 
-var server = net.createServer(function(socket) {
-	socket.write('Servidor: Eco do servidor\r\n');
-	socket.pipe(socket);
-});
+do{
+	data = tools.read_file('transporte+fisica.txt');
+	array_data = data.split('=');
+}while(array_data[1] == 'write_client');
 
-server.listen(7878, '127.0.0.1');
+
+
+// escreve o primeiro ack no arquivo
+tools.write_file('transporte+fisica.txt',data);
+
+do{
+	data = tools.read_file('transporte+fisica.txt');
+	array_data = data.split('=');
+}while(array_data[1] == 'write');
