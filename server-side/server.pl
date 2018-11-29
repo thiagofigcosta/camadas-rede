@@ -12,6 +12,7 @@ use Try::Tiny;
 use Net::Address::IP::Local; 
 
 require '../modules_perl/modules.pl';
+our ( $atribute_separator , $control_separator );
 
 # declara variaveis
 my $address = '172.168.0.1';
@@ -25,13 +26,13 @@ my $server_socket = $socket->accept();
 my $receive_bin = <$server_socket>;
 my $receive = sprintf pack("b*",$freceive_bin); 
 
-# escreve o conteudo do arquivo com o primeiro ACK
+# escreve no arquivo o primeiro ACK
 write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
-# fica esperando a camada de transporte escrever
+# fica esperando a camada de transporte ler e escrever o segundo ACK
 do{
 	my $data_file = read_file('transporte+fisica.txt');
-	my @array_data_file = split( '=' , $data_file );
+	my @array_data_file = split( $control_separator , $data_file );
 }while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE')
 			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
@@ -43,6 +44,9 @@ $thread->join();
 # espera o terceiro ACK
 $receive_bin = <$server_socket>;
 $receive = sprintf pack("b*",$freceive_bin); 
+
+# escreve no arquivo o terceiro ACK
+write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
 
 

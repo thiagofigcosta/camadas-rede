@@ -13,38 +13,38 @@ module.exports = {
     var data_offset = msg.length;
     ack += data_offset;
 
-    // 1 porta de origem
+    // 0 porta de origem
     var pdu = source_port + separator;
 
-    // 2 porta de destino
+    // 1 porta de destino
     pdu += destination_port + separator;
 
-    // 3 numero de sequencia
+    // 2 numero de sequencia
     pdu += seq.toString() + separator;
 
-    // 4 numero de confirmacao
+    // 3 numero de confirmacao
     pdu += ack.toString() + separator;
 
-    // 5 deslocamento de dados
+    // 4 deslocamento de dados
     pdu += '111100' + separator;
 
-    // 6 dados reservado para o cabeçalho
+    // 5 dados reservado para o cabeçalho
     pdu += '10100' + separator;
 
-    // 7 sinalizadores de controle
+    // 6 sinalizadores de controle
     pdu += '101010000' + separator;
 
-    // 8 tamanho da janela
+    // 7 tamanho da janela
     pdu += '1111111111111111' + separator;
 
-    // 9 soma de verificacao : ( tamanho da msg + 11 )
+    // 8 soma de verificacao : ( tamanho da msg + 11 )
     var sum = msg.length + 11;
     pdu += sum.toString() + separator;
 
-    // 10 ponteiro urgente
+    // 9 ponteiro urgente
     pdu += '0' + separator;
 
-    // 11 dados
+    // 10 dados
     pdu += msg;
 
     return pdu;
@@ -62,5 +62,13 @@ module.exports = {
     var msg = fs.readFileSync(file, 'utf8');
     return msg;
   }
+
+};
+
+
+var constants = {
+
+  atribute_separator  : ':',
+  control_separator   : '='
 
 };

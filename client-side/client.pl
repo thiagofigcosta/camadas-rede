@@ -12,16 +12,17 @@ use Try::Tiny;
 use Net::Address::IP::Local; 
 
 require '../modules_perl/modules.pl';
+our ( $atribute_separator , $control_separator );
 
 # le conteudo do arquivo com o primeiro ACK
 do{
 	# espera a camada de transporte escrever o primeiro ack no arquvivo
 	my $data_file = read_file('transporte+fisica.txt');
-	my @array_data_file = split( '=' , $data_file );
+	my @array_data_file = split( $control_separator , $data_file );
 }while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') 
 			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
-my @array_message_to_send = split(':',$array_data_file[0]);
+my @array_message_to_send = split($atribute_separator,$array_data_file[0]);
 # pega a porta de destino
 my $server_port = $array_message_to_send[1];
 # ip -> ESSA DADO DEVE VIR DA CAMADA TCP
@@ -43,7 +44,7 @@ write_file('transporte+fisica.txt',$receive);
 do{
 	# espera a camada de transporte escrever o terceiro ack
 	$data_file = read_file('transporte+fisica.txt');
-	@array_data_file = split( '=' , $data_file );
+	@array_data_file = split( $control_separator , $data_file );
 }while($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
 # enviar o terceiro ACK
@@ -156,7 +157,7 @@ $thread->join();
 # my $fsend_data = substr($data_fsend,$offset);
 # my $fsend_data_bin = sprintf unpack("b*",$fsend_data);# converte a mensagem para binario
 
-# my @serverfulladdr = split(':', $fsend_serverinfo);
+# my @serverfulladdr = split($atribute_separator, $fsend_serverinfo);
 # #my $serveraddr = $serverfulladdr[0];
 # my $serveraddr ="127.0.0.1" ;
 # my $serverport = "7878";

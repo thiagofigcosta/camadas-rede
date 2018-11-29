@@ -4,13 +4,26 @@ A estrutura do que é escrito no arquivo "transporte+fisica.txt" segue o seguint
 
 < dados de transmissão > '=' < valores de sincronismo >
 
-dados de transmissão = pdu e mensagem, é o que é de fato enviado no socket
-valores de sincronismo = valores de estado que implementam o sincronismo entre as camadas 
+onde '=' é o separador de de controle
+
+dados de transmissão     => pdu e mensagem, é o que é de fato enviado no socket
+valores de sincronismo   => valores de estado que implementam o sincronismo entre as camadas 
+
+
+
+
+
 
 EXEMPLO : 7878:7879:0:5:111100:10100:101010000:1111111111111111:16:0:hello=TRANSPORT_DONE|PHYSICAL_DIDNT
         ( nesse exemplo 
             -> 7878:7879:0:5:111100:10100:101010000:1111111111111111:16:0:hello : é o conteudo a ser enviado pelo socket
             -> TRANSPORT_DONE|PHYSICAL_DIDNT flags e sincronismo : nesse exemplo é indicado que a camada de transporte foi ultima a escrever no arquivo, e que a camada fisica ainda não leu
+nota: ':' é o separador de atributos
+
+
+
+
+
 
 
 VALORES DE SINCRONISMO -> A estrutura de sincronismo é a seguinte

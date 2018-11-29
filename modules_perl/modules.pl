@@ -1,3 +1,7 @@
+our ( $atribute_separator , $control_separator );
+$atribute_separator = ':';
+$control_separator = '=';
+
 ###### funcao para efetuar conexao com servidor
 sub connect_client{
 	# pegar parametros passados
