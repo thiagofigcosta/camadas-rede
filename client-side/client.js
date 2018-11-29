@@ -7,7 +7,7 @@ var ack = 0;
 
 // primeiro ack - indexa a PDU da camada de transporte
 var data = tools.create_pdu('3_WAY_HANDSHAKE',seq,ack,source_port,destination_port);
-var array_data = data.split(constants.atributes_separator);
+var array_data = data.split(tools.atributes_separator);
 // atualiza o ack
 ack = array_data[3];
 
@@ -23,14 +23,14 @@ do{
 }while( array_data[1] == 'TRANSPORT_DONE|PHYSICAL_DIDNT' );
 
 /* temos que fragmentar o conteudo para atualizar o ack e o seq*/
-var fragmented_data = array_data[0].split(constants.atributes_separator);
+var fragmented_data = array_data[0].split(tools.atributes_separator);
 /* atualizamos o SEQ */
 fragmented_data[2] += 1;
 /* atualizamos o ACK */
 fragmented_data[3] += fragmented_data[0].length;
 
 /* desfragmentamos para enviar */ 
-array_data[0] = fragmented_data.join(constants.atributes_separator);
+array_data[0] = fragmented_data.join(tools.atributes_separator);
 
 data = array_data[0] + '=TRANSPORT_DONE|PHYSICAL_DIDNT';
 

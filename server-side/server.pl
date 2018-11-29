@@ -15,35 +15,35 @@ require '../modules_perl/modules.pl';
 our ( $atribute_separator , $control_separator );
 
 # declara variaveis
-my $address = '172.168.0.1';
+my $address = '192.168.0.104';
 my $port = '7879';
 
 my $socket = create_server($port,$address);
-my $server_socket = $socket->accept(); 
-	or die "[ERRO CAMADA FISICA] erro no inicio de conexao com o cliente"; # aceita ou nao a conexao com um cliente
+my $server_socket = $socket->accept() or die "[ERRO CAMADA FISICA] erro no inicio de conexao com o cliente"; # aceita ou nao a conexao com um cliente
 
 # recebe o primeiro ACK
 my $receive_bin = <$server_socket>;
-my $receive = sprintf pack("b*",$freceive_bin); 
+my $receive = sprintf pack("b*",$receive_bin); 
 
 # escreve no arquivo o primeiro ACK
 write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
+my $data_file;
+my @array_data_file;
 # fica esperando a camada de transporte ler e escrever o segundo ACK
 do{
-	my $data_file = read_file('transporte+fisica.txt');
-	my @array_data_file = split( $control_separator , $data_file );
+	$data_file = read_file('transporte+fisica.txt');
+	@array_data_file = split( $control_separator , $data_file );
 }while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE')
 			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
 # enviar o segundo ACK
-my $thread = threads->create(\&send_message,$server_socket,$array_data_file[0]) ;
-					or die "Erro no envio"; 
+my $thread = threads->create(\&send_message,$server_socket,$array_data_file[0]) or die "Erro no envio"; 
 $thread->join();
 
 # espera o terceiro ACK
 $receive_bin = <$server_socket>;
-$receive = sprintf pack("b*",$freceive_bin); 
+$receive = sprintf pack("b*",$receive_bin); 
 
 # escreve no arquivo o terceiro ACK
 write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');

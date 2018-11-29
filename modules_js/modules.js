@@ -61,14 +61,10 @@ module.exports = {
     var fs = require('fs');
     var msg = fs.readFileSync(file, 'utf8');
     return msg;
-  }
-
-};
-
-
-var constants = {
+  },
 
   atribute_separator  : ':',
   control_separator   : '='
 
-};
+}
+

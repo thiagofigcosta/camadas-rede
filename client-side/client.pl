@@ -15,10 +15,13 @@ require '../modules_perl/modules.pl';
 our ( $atribute_separator , $control_separator );
 
 # le conteudo do arquivo com o primeiro ACK
+my $data_file;
+my @array_data_file;
 do{
 	# espera a camada de transporte escrever o primeiro ack no arquvivo
-	my $data_file = read_file('transporte+fisica.txt');
-	my @array_data_file = split( $control_separator , $data_file );
+	$data_file = read_file('transporte+fisica.txt');
+	@array_data_file = split( $control_separator , $data_file );
+	print @array_data_file;
 }while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') 
 			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
@@ -29,9 +32,8 @@ my $server_port = $array_message_to_send[1];
 my $server_ip = '172.0.0.1';
 
 # enviar o primeiro ACK
-my $client_socket = connect_client(server_port,server_ip);
-my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) ;
-					or die "Erro no envio"; 
+my $client_socket = connect_client($server_port,$server_ip);
+my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) or die "Erro no envio"; 
 $thread->join();
 
 # espera o segundo ACK do servidor
@@ -48,8 +50,7 @@ do{
 }while($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
 # enviar o terceiro ACK
-my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) ;
-					or die "Erro no envio"; 
+$thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) or die "Erro no envio"; 
 $thread->join();
 
 
