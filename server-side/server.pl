@@ -17,29 +17,32 @@ require '../modules_perl/modules.pl';
 my $address = '172.168.0.1';
 my $port = '7879';
 
-print "[DEBUG CAMADA FISICA - SERVIDOR] : Starting server ip:".$address." port:".$port."...\n";
-my $socket = new IO::Socket::INET ( 
-	LocalHost => $address,
-	LocalPort => $port,
-	Proto     => 'tcp',
-	Listen    => 1,
-	Reuse     => 1              
-)or die "[ERRO] on create socket: $! \n";
-$clientsocket = $socket->accept() 
+my $socket = create_server($port,$address);
+my $server_socket = $socket->accept(); 
 	or die "[ERRO CAMADA FISICA] erro no inicio de conexao com o cliente"; # aceita ou nao a conexao com um cliente
 
 # recebe o primeiro ACK
-my $receive_bin = <$clientsocket>;
+my $receive_bin = <$server_socket>;
 my $receive = sprintf pack("b*",$freceive_bin); 
 
 # escreve o conteudo do arquivo com o primeiro ACK
-write_file('transporte+fisica.txt',$receive);
+write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
+# fica esperando a camada de transporte escrever
+do{
+	my $data_file = read_file('transporte+fisica.txt');
+	my @array_data_file = split( '=' , $data_file );
+}while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE')
+			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
+# enviar o segundo ACK
+my $thread = threads->create(\&send_message,$server_socket,$array_data_file[0]) ;
+					or die "Erro no envio"; 
+$thread->join();
 
-
-
-
+# espera o terceiro ACK
+$receive_bin = <$server_socket>;
+$receive = sprintf pack("b*",$freceive_bin); 
 
 
 
@@ -200,7 +203,7 @@ write_file('transporte+fisica.txt',$receive);
 # 	# pegar parametros passados
 # 	my @s = @_ ;
 # 	my $sk = $s[0];
-# 	my $data = $s[1];
+# 	my $data_file = $s[1];
 	
 # 	my ($colisao,$time); 
 # 	$colisao = int(rand(10)); # colisao se o numero for >= 4
@@ -209,6 +212,6 @@ write_file('transporte+fisica.txt',$receive);
 # 		sleep($time); # espera um tempo aleatorio
 # 		$colisao = int(rand(10)); #calcula se vai ocorrer outra colisao
 # 	}	
-# 	print $sk "$data\n"; #envia os dados
+# 	print $sk "$data_file\n"; #envia os dados
 # 	threads->exit();
 # }

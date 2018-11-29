@@ -5,23 +5,19 @@ A estrutura do que é escrito no arquivo "transporte+fisica.txt" segue o seguint
 dados de transmissão = pdu e mensagem, é o que é de fato enviado no socket
 valores de sincronismo = valores de estado que implementam o sincronismo entre as camadas 
 
-EXEMPLO : 7878:7879:0:5:111100:10100:101010000:1111111111111111:16:0:hello=write_client0=TRANSPORT_CLIENT_WROTE|PHYSICAL_READ
+EXEMPLO : 7878:7879:0:5:111100:10100:101010000:1111111111111111:16:0:hello=TRANSPORT_DONE|PHYSICAL_DIDNT
         ( nesse exemplo 
             -> 7878:7879:0:5:111100:10100:101010000:1111111111111111:16:0:hello : é o conteudo a ser enviado pelo socket
-            -> TRANSPORT_CLIENT_WROTE|PHYSICAL_READ flags de sincronismo
+            -> TRANSPORT_DONE|PHYSICAL_DIDNT flags e sincronismo : nesse exemplo é indicado que a camada de transporte foi ultima a escrever no arquivo, e que a camada fisica ainda não leu
 
 
 VALORES DE SINCRONISMO -> A estrutura de sincronismo é a seguinte
 <   status da camada de transporte > '|' < status da camada fisica > 
 
 status da camada de transporte
-TRANSPORT_SERVER_READ 	: 	significa que o server.js que leu por ultimo
-TRANSPORT_SERVER_WROTE 	: 	significa que o server.js que escreveu por ultimo
-TRANSPORT_CLIENT_READ 	: 	significa que o client.js que leu por ultimo
-TRANSPORT_CLIENT_WROTE 	: 	significa que o client.js que escreveu por ultimo
+TRANSPORT_DONE	      : 	significa que o server.js escreveu 
+TRANSPORT_DIDNT 	  : 	significa que o client.js não escreve
 
 status da camada fisica
-PHYSICAL_DIDNT_WROTE :  significa que a camada fisica ainda não escreveu
-PHYSICAL_DIDNT_READ  :  significa que a camada fisica ainda não leu
-PHYSICAL_WROTE       :  significa que a camada fisica escreveu
-PHYSICAL_READ        :  significa que a camada fisica leu
+PHYSICAL_DONE       :  significa que a camada fisica escreveu
+PHYSICAL_DIDNT      :  significa que a camada fisica nao escreveu

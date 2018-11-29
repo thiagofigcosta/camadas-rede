@@ -15,21 +15,39 @@ require '../modules_perl/modules.pl';
 
 # le conteudo do arquivo com o primeiro ACK
 do{
-	my $data = read_file('transporte+fisica.txt');
-	my @array_data = split( '=' , $data );
-}while($array_data[1] eq 'TRANSPORT_CLIENT_WROTE|PHYSICAL_READ');
+	my $data_file = read_file('transporte+fisica.txt');
+	my @array_data_file = split( '=' , $data_file );
+}while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') 
+			|| ($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT'));
 
-# escreve no arquivo para indicar que ele ja foi lido pela camada fisica
-$array_data[1] = 'TRANSPORT_CLIENT_WROTE|PHYSICAL_READ';
-$data = join('=',$array_data[0],$array_data[1]);
-write_file('transporte+fisica.txt',$data);
+my @array_message_to_send = split(':',$array_data_file[0]);
+# pega a porta de destino
+my $server_port = $array_message_to_send[1];
+# ip -> ESSA DADO DEVE VIR DA CAMADA TCP
+my $server_ip = '172.0.0.1';
 
-my @array_message_to_send = split(':',$array_data[0]);
-my server_port = $array_message_to_send
 # enviar o primeiro ACK
-my socket = connect()
+my $client_socket = connect_client(server_port,server_ip);
+my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) ;
+					or die "Erro no envio"; 
+$thread->join();
 
+#espera o segundo ACK do servidor
+my $receive_bin = <$client_socket>;
+my $receive = sprintf pack("b*",$receive_bin); 
+$receive = join( "=", $receive , 'TRANSPORT_DIDNT|PHYSICAL_DONE');
+write_file('transporte+fisica.txt',$receive);
 
+do{
+	$data_file = read_file('transporte+fisica.txt');
+	@array_data_file = split( '=' , $data_file );
+}while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') ||
+	($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT') );
+
+# enviar o terceiro ACK
+my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) ;
+					or die "Erro no envio"; 
+$thread->join();
 
 
 
@@ -235,7 +253,7 @@ my socket = connect()
 # 	# pegar parametros passados
 # 	my @s = @_ ;
 # 	my $sk = $s[0];
-# 	my $data = $s[1];
+# 	my $data_file = $s[1];
 	
 # 	my ($colisao,$time); 
 # 	$colisao = int(rand(10)); # colisao se o numero for >= 4
@@ -244,7 +262,7 @@ my socket = connect()
 # 		sleep($time); # espera um tempo aleatorio
 # 		$colisao = int(rand(10)); #calcula se vai ocorrer outra colisao
 # 	}	
-# 	print $sk "$data\n"; #envia os dados
+# 	print $sk "$data_file\n"; #envia os dados
 # 	threads->exit();
 # }
 

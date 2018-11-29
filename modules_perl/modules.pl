@@ -1,5 +1,5 @@
 ###### funcao para efetuar conexao com servidor
-sub connect{
+sub connect_client{
 	# pegar parametros passados
 	my @s = @_ ;
 	my $server_port = $s[0];
@@ -14,6 +14,24 @@ sub connect{
 	) or die "[Erro]$!\n";
 	print "[DEBUG:CAMADA FISICA]Connected on server [ip:".$server_ip." port:".$server_port."]...\n";
 
+	return $socket;
+}
+
+sub create_server{
+	# pegar parametros passados
+	my @s = @_ ;
+	my $port = $s[0];
+	my $address  = $s[1];
+
+	print "[DEBUG CAMADA FISICA - SERVIDOR] : Starting server ip:".$address." port:".$port."...\n";
+	my $socket = new IO::Socket::INET ( 
+		LocalHost => $address,
+		LocalPort => $port,
+		Proto     => 'tcp',
+		Listen    => 1,
+		Reuse     => 1              
+	)or die "[ERRO] on create socket: $! \n";
+	
 	return $socket;
 }
 
@@ -36,7 +54,8 @@ sub send_message{
 		$colisao = int(rand(10)); 
 	}	
     #envia os dados
-	print $sk "$data\n"; 
+	my $data_bin = sprintf unpack("b*",$data);
+	print $sk "$data_bin\n"; 
 	threads->exit();
 }
 
