@@ -15,6 +15,7 @@ require '../modules_perl/modules.pl';
 
 # le conteudo do arquivo com o primeiro ACK
 do{
+	# espera a camada de transporte escrever o primeiro ack no arquvivo
 	my $data_file = read_file('transporte+fisica.txt');
 	my @array_data_file = split( '=' , $data_file );
 }while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') 
@@ -32,17 +33,18 @@ my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) 
 					or die "Erro no envio"; 
 $thread->join();
 
-#espera o segundo ACK do servidor
+# espera o segundo ACK do servidor
 my $receive_bin = <$client_socket>;
 my $receive = sprintf pack("b*",$receive_bin); 
 $receive = join( "=", $receive , 'TRANSPORT_DIDNT|PHYSICAL_DONE');
+# escreve o segundo ack no arquivo
 write_file('transporte+fisica.txt',$receive);
 
 do{
+	# espera a camada de transporte escrever o terceiro ack
 	$data_file = read_file('transporte+fisica.txt');
 	@array_data_file = split( '=' , $data_file );
-}while(($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE') ||
-	($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DIDNT') );
+}while($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
 # enviar o terceiro ACK
 my $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) ;
