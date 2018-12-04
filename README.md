@@ -21,12 +21,13 @@ ___
 
 ## Relação de Linguagens Escolhidas 
 
-| Camada | Linguagem |
-| ------ | ----------- |
-| fisica | perl |
-| aplicação | python |
-| transporte | javascript |
-| rede | swift |
+| Camada        | Linguagem   |
+| ------------- | ----------- |
+| aplicação     | python      |
+| transporte    | javascript  |
+| rede          | swift       |
+| fisica        | perl        |
+
 ___
 
 

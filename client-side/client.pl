@@ -38,17 +38,24 @@ $thread->join();
 
 # espera o segundo ACK do servidor
 my $receive_bin = <$client_socket>;
-my $receive = sprintf pack("b*",$receive_bin); 
+my $receive = sprintf unpack("b*",$receive_bin); 
 $receive = join( "=", $receive , 'TRANSPORT_DIDNT|PHYSICAL_DONE');
-print 'Primeiro ack recebido :>' . $receive;
+print 'Segundo ack recebido :>' . $receive;
 # escreve o segundo ack no arquivo
 write_file('transporte+fisica.txt',$receive);
 
-do{
-	# espera a camada de transporte escrever o terceiro ack
+my $shakinghands=1;
+
+while ($shakinghands) {
 	$data_file = read_file('transporte+fisica.txt');
-	@array_data_file = split( $control_separator , $data_file );
-}while($array_data_file[1] eq 'TRANSPORT_DIDNT|PHYSICAL_DONE');
+	if (defined $data_file){
+		@array_data_file = split( $control_separator , $data_file );
+		if ($array_data_file[1] ne 'TRANSPORT_DIDNT|PHYSICAL_DONE'){
+			$shakinghands=0;
+		}
+	}
+}
+
 
 # enviar o terceiro ACK
 $thread = threads->create(\&send_message,$client_socket,$array_data_file[0]) or die "Erro no envio"; 
