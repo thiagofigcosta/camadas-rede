@@ -64,13 +64,13 @@ while True:
 	data=MY_IP+chr(30)+DESIRED_IP+':'+DEFAULTAPP_PORT+chr(30)+str(sizex)+chr(30)+str(sizey)+chr(30)+str(mousex)+chr(30)+str(mousey)
 	data=str.encode(data)
 	
-	file = open("../message_master.txt", "wb")
+	file = open("../message_mouse.pdu", "wb")
 	file.write(data)
 	file.close()
 
 	while True:
 		try:
-			file = open("message_slave.txt", "r")
+			file = open("message_image.pdu", "r")
 			img_str=file.read()
 			
 			file.close()
@@ -78,7 +78,7 @@ while True:
 		except:
 			pass
 	try:
-		os.remove("message_master.txt")
+		os.remove("message_mouse.pdu")
 	except:
 		pass
 

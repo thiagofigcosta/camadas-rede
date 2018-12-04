@@ -14,11 +14,11 @@ ack = array_data[3];
 data += '=TRANSPORT_DONE|PHYSICAL_DIDNT';
 
 // escreve o primeiro ack no arquivo 
-tools.write_file('transporte+fisica.txt',data);
+tools.write_file('datagram_handshake.pdu',data);
 
 do{	
 	/* espera o segundo ack do servidor */
-	data = tools.read_file('transporte+fisica.txt');
+	data = tools.read_file('datagram_handshake.pdu');
 	array_data = data.split('=');
 }while( array_data[1] == 'TRANSPORT_DONE|PHYSICAL_DIDNT' );
 
@@ -35,5 +35,5 @@ array_data[0] = fragmented_data.join(tools.atributes_separator);
 data = array_data[0] + '=TRANSPORT_DONE|PHYSICAL_DIDNT';
 
 // escreve o terceiro ack no arquivo 
-tools.write_file('transporte+fisica.txt',data);
+tools.write_file('datagram_handshake.pdu',data);
 

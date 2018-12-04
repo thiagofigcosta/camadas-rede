@@ -13,14 +13,14 @@ FRAMESPERSECOND=30
 while True:
 	while True:
 		try:
-			file = open("message_master.txt", "r")
+			file = open("message_mouse.pdu", "r")
 			data=file.read()
 			file.close()
 			break
 		except:
 			pass
 	try:
-		os.remove("message_master.txt")
+		os.remove("message_mouse.pdu")
 	except:
 		pass
 
@@ -34,7 +34,7 @@ while True:
 		img_str = base64.b64encode(output.getvalue())
 	data=img_str
 
-	file = open("message_slave.txt", "wb")
+	file = open("message_image.pdu", "wb")
 	file.write(data)
 	file.close()
 

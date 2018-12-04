@@ -5,10 +5,10 @@
 Implementacao da Camada de Transporte  do Trabalho Prático de Redes 1 - CEFET-MG
 
   - Integrantes do grupo:
-    + Marcos Tiago Ferreira Henriques marcostiagofh@gmail.com
     + Bernard Menezes Moreira da Costa bernard.menezes98@gmail.com
     + Thiago Figueiredo Costa thiagofigcosta@hotmail.com
     + Pedro Henrique Cordeiro de Jesus pedro.henrique.cefetmg@gmail.com
+    + Marcos Tiago Ferreira Henriques marcostiagofh@gmail.com
 
 O Enunciado está neste __[link.](https://docs.google.com/document/d/1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A/edit)__
 O relatório a ser preenchido está neste __[link.](https://docs.google.com/document/d/1Jkdm1ab7stzki03h5Mim50l1egjnSPyiNFp3CbYJx2A/edit?usp=sharing)__
@@ -29,6 +29,41 @@ ___
 | fisica        | perl        |
 
 ___
+
+
+## PDUs #
+
+### Aplicação #
+
+>- **message_mouse.pdu**: Mensagem da camada de aplicação que contem a posição do mouse, resolução da tela, ip (de onde vai conectar) e porta (de onde vai conectar), escrito pelo cliente, as informações são separadas por um caractere de controle (char 30)
+
+>- **message_image.pdu**: Mensagem da camada de aplicação que contem a imagem da tela em formato base 64, escrito pelo servidor
+
+### Transporte #
+
+>- **datagram_handshake.pdu**: Arquivo que contem os dados das camadas de transporte,rede e fisica junto das flags de sincronismo ( sincronismo entre as camadas que consomem os dados do arquivo ), as informações são separadas por um caractere de controle ( '=' ). Na parte do cabe
+
+>- **datagram_mouse.pdu**: 
+
+>- **datagram_image.pdu**:
+
+### Rede
+
+>- **packet_handshake.pdu**:
+
+>- **packet_mouse.pdu**: 
+
+>- **packet_image.pdu**:
+
+
+### Fisica
+
+>- **bit_handshake.pdu**:
+
+>- **bit_mouse.pdu**: 
+
+>- **bit_image.pdu**:
+
 
 
 ## Execução
