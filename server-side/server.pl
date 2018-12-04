@@ -27,7 +27,7 @@ my $receive = sprintf pack("b*",$receive_bin);
 print 'Primeiro ack recebido :>' . $receive;
 
 # escreve no arquivo o primeiro ACK
-write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
+write_file('transporte+fisica.txt',$receive . 'TRANSPORT_DIDNT|PHYSICAL_DONE');
 
 my $data_file;
 my @array_data_file;
