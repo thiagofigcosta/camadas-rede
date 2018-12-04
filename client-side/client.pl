@@ -29,7 +29,7 @@ my @array_message_to_send = split($atribute_separator,$array_data_file[0]);
 # pega a porta de destino
 my $server_port = $array_message_to_send[1];
 # ip -> ESSA DADO DEVE VIR DA CAMADA TCP
-my $server_ip = '172.0.0.1';
+my $server_ip = '172.16.252.75';
 
 # enviar o primeiro ACK
 my $client_socket = connect_client($server_port,$server_ip);
