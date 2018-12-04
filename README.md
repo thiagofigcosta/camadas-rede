@@ -30,6 +30,20 @@ ___
 ___
 
 
+## Execução
+    
+### Server-side
+```
+
+```
+
+### Client-side
+```
+    node client-side/client.js
+    perl client-side/client.pl
+    python client-side/controller.py
+```
+
 ## Uso do Código
 
 
@@ -82,6 +96,11 @@ perl client.pl
 
 
 ### Camada de transporte
+
+Instale os pacotes necessários, através dos comandos:
+
+    sudo apt-get install nodejs
+    sudo apt-get install npm
 
 Instale algum interpretador `javascript` (Sugiro node.js e o gerenciador de pacotes Chocolatey)
 
