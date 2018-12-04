@@ -154,24 +154,28 @@ node server.js
 
 Instale o swift 4.2:
 
-#### Dependencias
+
+**Ubuntu 18.04**:
 ```
-    sudo apt-get install git cmake ninja-build clang python uuid-dev libicu-dev icu-devtools libbsd-dev libedit-dev libxml2-dev libsqlite3-dev swig libpython-dev libncurses5-dev pkg-config libblocksruntime-dev libcurl4-openssl-dev autoconf libtool systemtap-sdt-dev tzdata rsync 
+   wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1804/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu18.04.tar.gz 
+```
+**Ubuntu 16.04**:
+```
+    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1604/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu16.04.tar.gz
 ```
 
-#### Ubuntu 18.04
-
+**Ubuntu 14.04**:
 ```
-   wget https://swift.org/builds/swift-4.2-branch/ubuntu1804/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu18.04.tar.gz 
-```
-#### Ubuntu 16.04
-```
-    wget https://swift.org/builds/swift-4.2-branch/ubuntu1604/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu16.04.tar.gz
+    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1404/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu14.04.tar.gz
 ```
 
-#### Ubuntu 14.04
+**Instalando**:
 ```
-    wget https://swift.org/builds/swift-4.2-branch/ubuntu1404/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu14.04.tar.gz
+    mkdir ~/.swift
+    tar xzf .swift.tar.gz -C ~/.swift --strip-components=1
+    export PATH=~/.swift/usr/bin:"${PATH}"
+    vi ~/.bashrc                                              # add 'export PATH=~/.swift/usr/bin:"${PATH}"' to end
+    swift                                                     # test
 ```
 
 #### Caso haja algum problema tente
@@ -180,3 +184,5 @@ Instale o swift 4.2:
     sudo apt-get update
     sudo apt-get install libicu55
 ```
+
+
