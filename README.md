@@ -26,7 +26,7 @@ ___
 | fisica | perl |
 | aplicação | python |
 | transporte | javascript |
-| rede | php |
+| rede | swift |
 ___
 
 
@@ -34,14 +34,18 @@ ___
     
 ### Server-side
 ```
-
+    cd server-side
+    node server.js
+    perl server.pl
+    python controlled.py
 ```
 
 ### Client-side
 ```
-    node client-side/client.js
-    perl client-side/client.pl
-    python client-side/controller.py
+    cd client-side
+    node client.js
+    perl client.pl
+    python controller.py
 ```
 
 ## Uso do Código
@@ -108,4 +112,35 @@ Rode o script "server.js".
 
 ```
 node server.js
+```
+
+### Camada de rede
+
+Instale o swift 4.2:
+
+#### Dependencias
+```
+    sudo apt-get install git cmake ninja-build clang python uuid-dev libicu-dev icu-devtools libbsd-dev libedit-dev libxml2-dev libsqlite3-dev swig libpython-dev libncurses5-dev pkg-config libblocksruntime-dev libcurl4-openssl-dev autoconf libtool systemtap-sdt-dev tzdata rsync 
+```
+
+#### Ubuntu 18.04
+
+```
+   wget https://swift.org/builds/swift-4.2-branch/ubuntu1804/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu18.04.tar.gz 
+```
+#### Ubuntu 16.04
+```
+    wget https://swift.org/builds/swift-4.2-branch/ubuntu1604/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu16.04.tar.gz
+```
+
+#### Ubuntu 14.04
+```
+    wget https://swift.org/builds/swift-4.2-branch/ubuntu1404/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu14.04.tar.gz
+```
+
+#### Caso haja algum problema tente
+```
+    echo "deb http://security.ubuntu.com/ubuntu xenial-security main" | sudo tee -- append /etc/apt/sources.list
+    sudo apt-get update
+    sudo apt-get install libicu55
 ```
