@@ -41,19 +41,19 @@ ___
 
 ### Transporte #
 
->- **datagram_handshake.pdu**: Arquivo que contem os dados das camadas de transporte,rede e fisica junto das flags de sincronismo ( sincronismo entre as camadas que consomem os dados do arquivo ), as informações são separadas por um caractere de controle ( '=' ). Na parte do cabe
+>- **segment_handshake.pdu**: Arquivo que contem os dados das camadas de transporte,rede e fisica junto das flags de sincronismo ( sincronismo entre as camadas que consomem os dados do arquivo ), as informações são separadas por um caractere de controle ( '=' ). Na parte do cabe
+
+>- **segment_mouse.pdu**: 
+
+>- **segment_image.pdu**:
+
+### Rede
+
+>- **datagram_handshake.pdu**:
 
 >- **datagram_mouse.pdu**: 
 
 >- **datagram_image.pdu**:
-
-### Rede
-
->- **packet_handshake.pdu**:
-
->- **packet_mouse.pdu**: 
-
->- **packet_image.pdu**:
 
 
 ### Fisica
