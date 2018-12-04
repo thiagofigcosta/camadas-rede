@@ -15,8 +15,8 @@ require '../modules_perl/modules.pl';
 our ( $atribute_separator , $control_separator );
 
 # declara variaveis
-my $address = '192.168.0.104';
-my $port = '7879';
+my $address = '172.16.252.75';
+my $port = '7978';
 
 my $socket = create_server($port,$address);
 my $server_socket = $socket->accept() or die "[ERRO CAMADA FISICA] erro no inicio de conexao com o cliente"; # aceita ou nao a conexao com um cliente
@@ -24,6 +24,7 @@ my $server_socket = $socket->accept() or die "[ERRO CAMADA FISICA] erro no inici
 # recebe o primeiro ACK
 my $receive_bin = <$server_socket>;
 my $receive = sprintf pack("b*",$receive_bin); 
+print 'Primeiro ack recebido :>' . $receive;
 
 # escreve no arquivo o primeiro ACK
 write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');
@@ -44,6 +45,7 @@ $thread->join();
 # espera o terceiro ACK
 $receive_bin = <$server_socket>;
 $receive = sprintf pack("b*",$receive_bin); 
+print 'Terceiro ack recebido :>' . $receive;
 
 # escreve no arquivo o terceiro ACK
 write_file('transporte+fisica.txt',$receive + 'TRANSPORT_DIDNT|PHYSICAL_DONE');

@@ -40,6 +40,7 @@ $thread->join();
 my $receive_bin = <$client_socket>;
 my $receive = sprintf pack("b*",$receive_bin); 
 $receive = join( "=", $receive , 'TRANSPORT_DIDNT|PHYSICAL_DONE');
+print 'Primeiro ack recebido :>' . $receive;
 # escreve o segundo ack no arquivo
 write_file('transporte+fisica.txt',$receive);
 
