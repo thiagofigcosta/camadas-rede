@@ -154,6 +154,11 @@ node server.js
 
 Instale o swift 4.2:
 
+**Dependencias**:
+```
+sudo apt-get install clang libicu-dev
+```
+
 
 **Ubuntu 18.04**:
 ```
