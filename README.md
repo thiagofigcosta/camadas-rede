@@ -162,16 +162,16 @@ sudo apt-get install clang libicu-dev
 
 **Ubuntu 18.04**:
 ```
-   wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1804/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu18.04.tar.gz 
+   wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1804/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu18.04.tar.gz
 ```
 **Ubuntu 16.04**:
 ```
-    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1604/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu16.04.tar.gz
+    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1604/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu16.04.tar.gz
 ```
 
 **Ubuntu 14.04**:
 ```
-    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2-branch/ubuntu1404/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a/swift-4.2-DEVELOPMENT-SNAPSHOT-2018-10-30-a-ubuntu14.04.tar.gz
+    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1404/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu14.04.tar.gz
 ```
 
 **Instalando**:
