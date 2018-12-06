@@ -156,7 +156,7 @@ Instale o swift 4.2:
 
 **Dependencias**:
 ```
-sudo apt-get install clang libicu-dev
+sudo apt-get install build-essential clang libicu-dev
 ```
 
 
