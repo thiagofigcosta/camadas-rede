@@ -1,17 +1,21 @@
-# Camada de Transporte 
+# Implementação das camadas de rede do modelo TCP 
 
->- **Link deste repositório:** https://github.com/thiagofigcosta/camadas-rede
+>- **Camada Fisica:** https://github.com/pedrohenriquecordeiro/camadafisica
+>- **Camada Rede:** https://github.com/thiagofigcosta/camadarede
+>- **Camada Transporte:** https://github.com/Bernard2254/camadatransporte
+>- **Camada Aplicação:** https://github.com/thiagofigcosta/camadaaplicacao
+
+>- **Todas as camadas:** https://github.com/thiagofigcosta/camadas-rede
 
 Implementacao da Camada de Transporte  do Trabalho Prático de Redes 1 - CEFET-MG
 
   - Integrantes do grupo:
     + Bernard Menezes Moreira da Costa bernard.menezes98@gmail.com
-    + Thiago Figueiredo Costa thiagofigcosta@hotmail.com
     + Pedro Henrique Cordeiro de Jesus pedro.henrique.cefetmg@gmail.com
+    + Thiago Figueiredo Costa thiagofigcosta@hotmail.com
     + Marcos Tiago Ferreira Henriques marcostiagofh@gmail.com
 
 O Enunciado está neste __[link.](https://docs.google.com/document/d/1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A/edit)__
-O relatório a ser preenchido está neste __[link.](https://docs.google.com/document/d/1Jkdm1ab7stzki03h5Mim50l1egjnSPyiNFp3CbYJx2A/edit?usp=sharing)__
 
 ___
 
@@ -68,48 +72,17 @@ ___
 
 ## Execução
     
-### Server-side
+### Computador
 ```
-    cd server-side
-    node server.js
-    perl server.pl
-    python controlled.py
+    WIP
 ```
 
-### Client-side
+### Roteador
 ```
-    cd client-side
-    node client.js
-    perl client.pl
-    python controller.py
+    WIP
 ```
 
 ## Uso do Código
-
-
-### Camada de aplicação
-Instale a linguagem `python` (versão 2.7) e os pacotes necessários, através dos comandos:
-
-    sudo apt-get install python
-	sudo apt-get install python-pip
-	sudo apt-get install python-tk
-	sudo apt-get install python-xlib
-	sudo apt-get install scrot
-	pip install -r requirements.txt
-
-
-Na máquina que será controlada, rode o script "controlled.py"
-
-```
-python controlled.py
-```
-
-Na máquina que irá controlar, rode o script "controller.py"
-
-```
-python controller.py
-```
-
 
 ### Camada Física
 Instale a linguagem `perl`
@@ -134,32 +107,15 @@ Na máquina que será o cliente, rode o script "client.pl"
 perl client.pl
 ```
 
+### Camada de Rede
 
-### Camada de transporte
+Instale a linguagem `swift` (versão 4.2) e os pacotes necessários, através dos comandos:
 
-Instale os pacotes necessários, através dos comandos:
-
-    sudo apt-get install nodejs
-    sudo apt-get install npm
-
-Instale algum interpretador `javascript` (Sugiro node.js e o gerenciador de pacotes Chocolatey)
-
-Rode o script "server.js".
-
-```
-node server.js
-```
-
-### Camada de rede
-
-Instale o swift 4.2:
-
-**Dependencias**:
 ```
 sudo apt-get install build-essential clang libicu-dev
+
+
 ```
-
-
 **Ubuntu 18.04**:
 ```
    wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1804/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu18.04.tar.gz
@@ -168,13 +124,11 @@ sudo apt-get install build-essential clang libicu-dev
 ```
     wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1604/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu16.04.tar.gz
 ```
-
 **Ubuntu 14.04**:
 ```
     wget -O .swift.tar.gz https://swift.org/builds/swift-4.2.1-release/ubuntu1404/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu14.04.tar.gz
 ```
 
-**Instalando**:
 ```
     mkdir ~/.swift
     tar xzf .swift.tar.gz -C ~/.swift --strip-components=1
@@ -183,11 +137,45 @@ sudo apt-get install build-essential clang libicu-dev
     swift                                                     # test
 ```
 
-#### Caso haja algum problema tente
+#### Caso haja algum problema de instalação no ubuntu tente
 ```
     echo "deb http://security.ubuntu.com/ubuntu xenial-security main" | sudo tee -- append /etc/apt/sources.list
     sudo apt-get update
     sudo apt-get install libicu55
 ```
 
+Para executar basta rodar os comandos:
+```
+    swiftc swiftepc.swift -o swiftepc
+    ./swiftepc network.swift -o network
+    ./network
+```
 
+
+### Camada de transporte
+
+Instale o interpretador `javascript`, através dos comandos:
+
+    sudo apt-get install nodejs
+    sudo apt-get install npm
+
+
+Para executar basta rodar o comando:
+
+```
+node server.js
+```
+
+### Camada de aplicação
+Instale a linguagem `python` (versão 2.7) e os pacotes necessários, através dos comandos:
+
+    sudo apt-get install python
+    sudo apt-get install python-pip
+    sudo apt-get install python-tk
+    sudo apt-get install python-xlib
+    sudo apt-get install scrot
+    pip install -r requirements.txt
+
+Para executar basta rodar o comando:
+```
+    python MickeyMouseProtocol.py
