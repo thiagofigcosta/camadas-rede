@@ -39,46 +39,38 @@ ___
 
 ### Aplicação #
 
->- **message_mouse.pdu**: Mensagem da camada de aplicação que contem a posição do mouse, resolução da tela, ip (de onde vai conectar) e porta (de onde vai conectar), escrito pelo cliente, as informações são separadas por um caractere de controle (char 30)
+>- **message_in.pdu**: Mensagem que a camada de aplicação recebe da camada de transporte. ***Formato***: Host: **resolutionX**+30\*+**resolutionY**+30\*+**mouseX**+30\*+**mouseY** Client: **screenBase64**
 
->- **message_image.pdu**: Mensagem da camada de aplicação que contem a imagem da tela em formato base 64, escrito pelo servidor
+>- **message_out.pdu**: Mensagem que a camada de aplicação envia para a camada de transporte. ***Formato***: Host: **screenBase64** Client: **resolutionX**+30\*+**resolutionY**+30\*+**mouseX**+30\*+**mouseY**
 
 ### Transporte #
 
->- **segment_handshake.pdu**: Arquivo que contem os dados das camadas de transporte,rede e fisica junto das flags de sincronismo ( sincronismo entre as camadas que consomem os dados do arquivo ), as informações são separadas por um caractere de controle ( '=' ). Na parte do cabe
+>- **datagram_in.pdu**: Mensagem que a camada de transporte recebe da camada de rede, sem o header de rede.
 
->- **segment_mouse.pdu**: 
-
->- **segment_image.pdu**:
+>- **datagram_out.pdu**: Mensagem que a camada de transporte envia para a camada de rede, com o header de transporte.
 
 ### Rede
 
->- **datagram_handshake.pdu**:
+>- **packet_in.pdu**: Mensagem que a camada de rede recebe da camada fisica, sem o header da camada fisica.
 
->- **datagram_mouse.pdu**: 
-
->- **datagram_image.pdu**:
+>- **packet_out.pdu**: Mensagem que a camada de rede envia para a camada fisica, com o header de rede.
 
 
 ### Fisica
 
->- **bit_handshake.pdu**:
-
->- **bit_mouse.pdu**: 
-
->- **bit_image.pdu**:
+>- **bit_out.pdu**: Mensagem que a camada fisica envia para a camada de rede, com o header da camada fisica.
 
 ## Zaps #
 
 Zaps são informações trocadas entre as camadas que não são referentes à nenhuma PDU, contem informações importantes para o encaminhamento das PDUs.
 
->- **device_socket.zap**: Contem o ip e a porta do dispositivo para que a camada fisica abra o socket, no caso dos computadores é enviada da camada de aplicação para a camada fisica no caso dos roteadores é escrito manualmente. Formato: **sourceIp**:**sourcePort**
+>- **device_socket.zap**: Contem o ip e a porta do dispositivo para que a camada fisica abra o socket, no caso dos computadores é enviada da camada de aplicação para a camada fisica no caso dos roteadores é escrito manualmente. ***Formato***: **sourceIp**:**sourcePort**
 
->- **application_ips.zap**: Contem os ips e as portas de origem e destino da mensagem, é enviada da camada de aplicação para a camada de transporte. Formato: **sourceIp**:**sourcePort**-**destinationIp**:**destinationPort**
+>- **application_ips.zap**: Contem os ips e as portas de origem e destino da mensagem, é enviada da camada de aplicação para a camada de transporte. ***Formato***: **sourceIp**:**sourcePort**-**destinationIp**:**destinationPort**
 
->- **transport_ips.zap**: Contem os ips de origem e destino do datagrama, é enviada da camada de transporte para a camada de rede. Formato: **sourceIp**-**destinationIp**
+>- **transport_ips.zap**: Contem os ips de origem e destino do datagrama, é enviada da camada de transporte para a camada de rede. ***Formato***: **sourceIp**-**destinationIp**
 
->- **routed_ip.zap**: Contem o ip intermediario para a transmissão do pacote, é enviada da camada de rede para a camada fisica. Formato: **routedIp**
+>- **routed_ip.zap**: Contem o ip intermediario para a transmissão do pacote, é enviada da camada de rede para a camada fisica. ***Formato***: **routedIp**
 
 ## Execução
     
