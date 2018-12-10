@@ -7,6 +7,8 @@
 
 >- **Todas as camadas:** https://github.com/thiagofigcosta/tcpip_layers
 
+>- **Maquina virtual configurada para executar todas as camadas:** https://drive.google.com/file/d/1c9fUdUE6_LxIfJ-yEhVWyaKXFnRBOi7T/view?usp=sharing
+
 Implementacao da Camada de Transporte  do Trabalho Prático de Redes 1 - CEFET-MG
 
   - Integrantes do grupo:
