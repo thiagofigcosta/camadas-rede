@@ -64,8 +64,6 @@ ___
 
 Zaps são informações trocadas entre as camadas que não são referentes à nenhuma PDU, contem informações importantes para o encaminhamento das PDUs.
 
->- **device_socket.zap**: Contem o ip e a porta do dispositivo para que a camada fisica abra o socket, no caso dos computadores é enviada da camada de aplicação para a camada fisica no caso dos roteadores é escrito manualmente. ***Formato***: **sourceIp**:**sourcePort**
-
 >- **application_ips.zap**: Contem os ips e as portas de origem e destino da mensagem, é enviada da camada de aplicação para a camada de transporte. ***Formato***: **sourceIp**:**sourcePort**-**destinationIp**:**destinationPort**
 
 >- **transport_ips.zap**: Contem os ips de origem e destino do datagrama, é enviada da camada de transporte para a camada de rede. ***Formato***: **sourceIp**-**destinationIp**
@@ -95,6 +93,7 @@ Instale os pacotes necessários, através dos comandos:
     install IO::Socket::INET
     install Time::HiRes
     install Net::Address::IP::Local
+    install Try::Tiny
 
 
 Na máquina que será o servidor, rode o script "server.pl"
