@@ -12,6 +12,8 @@ use threads;
 use threads::shared;
 
 my $IsWifi = 1;
+my $IsVirtual = 0;
+my $virtualMAC = '00:00:00:00:00:00';
 
 sub fixStrSize {
 	my ($str,$size) = @_;
@@ -299,19 +301,23 @@ sub getMAC {
 	my $class = shift;
 	my $so = "$^O\n";
 	my $mac;
-	if(index($so, "linux") != -1) {
-		if($IsWifi){
-			$mac = substr `cat /sys/class/net/*/address`,35,51;
-		}else{
-			$mac = substr `cat /sys/class/net/*/address`,0,17;
-		}
-	}elsif(index($so,"Win") != -1){
-		$mac = `getmac`;
-		if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
-			$mac = $1;
-		}
+	if ($IsVirtual){
+		$mac=$virtualMAC;
 	}else{
-		$mac = "00:00:00:00:00:00";
+		if(index($so, "linux") != -1) {
+			if($IsWifi){
+				$mac = substr `cat /sys/class/net/*/address`,35,51;
+			}else{
+				$mac = substr `cat /sys/class/net/*/address`,0,17;
+			}
+		}elsif(index($so,"Win") != -1){
+			$mac = `getmac`;
+			if($mac =~ m/(\w\w-\w\w-\w\w-\w\w-\w\w-\w\w) | (\w\w:\w\w:\w\w:\w\w:\w\w:\w\w) /){
+				$mac = $1;
+			}
+		}else{
+			$mac = "00:00:00:00:00:00";
+		}
 	}
 	my $mac_int = 0;
 	my $offset=44;

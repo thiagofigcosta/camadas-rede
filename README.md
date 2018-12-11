@@ -76,7 +76,8 @@ Zaps são informações trocadas entre as camadas que não são referentes à ne
 
 >- Definir quais dispositivos irão se conectar à rede, o limite é de 11 dispositivos podendo ser expandido até o limite de conexões aceitas em sockets perl + 1. 
 >- Um dos despositivos deve ser escolhido como servidor na camada fisica e os outros deverão ser clientes. 
->- Caso o computador esteja conectado no wifi, definir a variável isWifi como 1 na camada fisica (se for maquina virtual considerar o computador sempre como conexão cabeada). 
+>- Caso o computador esteja conectado no wifi, definir a variável isWifi como 1 na camada fisica. 
+>- Caso o computador seja uma maquina virtual, definir a variável isVirtual como 1 e colocar manualmente o MAC Address conectado na rede na variável virtualMAC. 
 >- Executar a camada fisica como servidor, digitar o numero de dispositivos que irão se conectar nele
 >- Abrir a camada fisica nesses dispositivos como cliente.
 >- Executar a camada de rede e configurar a tabela de roteamento, lembrar de colocar o default gateway (0.0.0.0). Caso seja necessário use o comando `ip -c a` para consultar ips.
