@@ -753,9 +753,7 @@ function receive(){
 // writeBinFile("batata", 'molecula.pdu');
 // var base64str = readBinFile('molecula.pdu');
 // console.log(base64str);	
-while(true){
-forward();
-}
+
 // convert base64 string back to image 
 
 // writeBinFile("molecula.pdu", "01010101010");
@@ -772,10 +770,10 @@ forward();
 // removeObjInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', 0);
 // console.log(arrayOfConections[0]);
 
-// while(true){
-// 	forward();
-// 	receive();
-// }
+while(true){
+	forward();
+	receive();
+}
 
 
 
