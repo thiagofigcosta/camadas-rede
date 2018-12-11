@@ -27,13 +27,14 @@ function readBinFile(file) {
 }
 
 function writeBinFile(file, base64str) {
+	console.log(base64str);
     writeStrFile(file, base64str);
 }
 
 function readStrFile(fileName) {
 	var fs = require("fs");
 	var text = fs.readFileSync(fileName);
-	return text.toString().replace("\n\t", "");
+	return text.toString();
 }
 
 function writeStrFile(fileName, string){
@@ -86,8 +87,37 @@ function concatDatagram(datagram){
 
 }
 
+function shiftDatagram(datagram){
+	var allConcat = String.fromCharCode(datagram.sourcePort>>8);
+	allConcat += String.fromCharCode(datagram.sourcePort&0b11111111);
+	allConcat += String.fromCharCode(datagram.destinationPort>>8);
+	allConcat += String.fromCharCode(datagram.destinationPort&0b11111111);
+	allConcat += String.fromCharCode((datagram.sequenceNumber>>24)&0b11111111);
+	allConcat += String.fromCharCode((datagram.sequenceNumber>>16)&0b11111111);
+	allConcat += String.fromCharCode((datagram.sequenceNumber>>8)&0b11111111);
+	allConcat += String.fromCharCode((datagram.sequenceNumber)&0b11111111);
+	allConcat += String.fromCharCode((datagram.ackNumber>>24)&0b11111111);
+	allConcat += String.fromCharCode((datagram.ackNumber>>16)&0b11111111);
+	allConcat += String.fromCharCode((datagram.ackNumber>>8)&0b11111111);
+	allConcat += String.fromCharCode((datagram.ackNumber)&0b11111111);
+	allConcat += String.fromCharCode((datagram.dataOffset<<4)|((datagram.reserved>>2)&0b1111));
+	allConcat += String.fromCharCode(((datagram.reserved&0b11)<<6)|(((datagram.urgFlag>>2)&0b1)<<5)|(((datagram.ackFlag>>2)&0b1)<<4)|(((datagram.pshFlag>>2)&0b1)<<3)|(((datagram.rstFlag>>2)&0b1)<<2)|(((datagram.synFlag>>2)&0b1)<<1)|(((datagram.finFlag>>2)&0b1)));
+	allConcat += String.fromCharCode(datagram.microsoftWindow>>8);
+	allConcat += String.fromCharCode(datagram.microsoftWindow&0b11111111);
+	allConcat += String.fromCharCode(datagram.checkSum>>8);
+	allConcat += String.fromCharCode(datagram.checkSum&0b11111111);
+	allConcat += String.fromCharCode(datagram.urgentPointer>>8);
+	allConcat += String.fromCharCode(datagram.urgentPointer&0b11111111);
+	allConcat += String.fromCharCode(datagram.badOptions>>2);
+	allConcat += String.fromCharCode(((datagram.badOptions&0b11)<<6)|0);
+	allConcat+=datagram.dataDeAniversario;
+	return allConcat
+
+}
+
 function writeDatagramBin(fileName, datagram){
-	var concat = concatDatagram(datagram);
+	var concat = shiftDatagram(datagram);
+	console.log(concat);
 	writeBinFile(fileName, concat);
 }
 
@@ -228,7 +258,7 @@ var Datagram = class {
 		}
 		if(ipZap!=undefined){
 			this.ipZap=ipZap;
-			writeStrFile("transport_ips.zap", ipZap);
+			writeStrFile("transport_ips.zap", ipZap.split(":")[0]+"-"+ipZap.split("-")[1].split(":")[0]);
 		}
 	}
 
@@ -242,6 +272,7 @@ var arrayOfConections = [];
 
 function forward(){
 	var fs = require('fs');
+		console.log(fs.existsSync("message_out.pdu"));
 		if (fs.existsSync("message_out.pdu") && fs.existsSync("application_ips.zap")) {
 		    var applicationZap = readStrFile("application_ips.zap");
 		    removeFile("application_ips.zap");
@@ -414,8 +445,8 @@ function forward(){
 }
 
 function checkCheckSum(allConcat){
-
-	var value=0;
+	return true;
+	var value=0;	
 
 	for(y=0; y<allConcat.length/16;y++){
 		var tmp = allConcat.substring(y*16, ((y+1)*16));
@@ -436,28 +467,107 @@ function receive(){
 		if (fs.existsSync("datagram_in.pdu")) {
 		    var datagrama = readBinFile("datagram_in.pdu");
 		    removeFile("datagram_in.pdu");
-		    var sourcePort = datagrama.substring(0,16);
-			var destinationPort = datagrama.substring(16,32);
-			var sequenceNumber = datagrama.substring(32,64);
-			var ackNumber = datagrama.substring(64,96);
-			var dataOffset = datagrama.substring(96,100);
-			var reserved = datagrama.substring(100,106);
-			var urgFlag = datagrama.substring(106,107);
-			var ackFlag = datagrama.substring(107,108);
-			var pshFlag = datagrama.substring(108,109);
-			var rstFlag = datagrama.substring(109,110);
-			var synFlag = datagrama.substring(110,111);
-			var finFlag = datagrama.substring(111,112);
-			var microsoftWindow = datagrama.substring(112,128);
-			var checkSum = datagrama.substring(128,144);
-			var urgentPointer = datagrama.substring(144,160);
-			var badOptions = datagrama.substring(160,160+dec2bin(maximumSegmentSize).length);
-			var padding = datagrama.substring(160+dec2bin(maximumSegmentSize).length, dataOffset*32);
-			var data = datagrama.substring(dataOffset*32);
+
+
+
+
+
+			var sourcePort=0;
+			var destinationPort =0;
+			var sequenceNumber =0;
+			var ackNumber =0;
+			var dataOffset =0;
+			var reserved =0;
+			var urgFlag = 0;
+			var ackFlag = 0;
+			var pshFlag =0;
+			var rstFlag = 0;
+			var synFlag =0;
+			var finFlag = 0;
+			var microsoftWindow=0;
+			var checkSum=0;
+			var urgentPointer=0;
+			var badOptions=0;
+			var data;
+		 	for (var i=0; i<datagrama.length; i++){
+				var v=datagrama[i].charCodeAt(0);
+				if (i==0) {
+					sourcePort=(v<<8);
+				}else if(i==1){
+					sourcePort=sourcePort|v;
+				}else if(i==2){
+					destinationPort=(v<<8);
+				}else if(i==3){
+					destinationPort=destinationPort|v;
+				}else if(i==4){
+					sequenceNumber=(v<<24);
+				}else if(i==5){
+					sequenceNumber=sequenceNumber|(v<<16);
+				}else if(i==6){
+					sequenceNumber=sequenceNumber|(v<<8);
+				}else if(i==7){
+					sequenceNumber=sequenceNumber|v;
+				}else if(i==8){
+					ackNumber=(v<<24);
+				}else if(i==9){
+					ackNumber=ackNumber|(v<<16);
+				}else if(i==10){
+					ackNumber=ackNumber|(v<<8);
+				}else if(i==11){
+					ackNumber=ackNumber|v;
+				}else if(i==12){
+					dataOffset=v>>4;
+					reserved=(v&0b1111)<<2;
+				}else if(i==13){
+					reserved=reserved|(v>>6)&0b11;
+					urgFlag=(v>>5)&0b1;
+					ackFlag=(v>>4)&0b1;
+					pshFlag=(v>>3)&0b1;
+					rstFlag=(v>>2)&0b1;
+					synFlag=(v>>1)&0b1;
+					finFlag=(v)&0b1;
+				}else if(i==14){
+					microsoftWindow=(v<<8);
+				}else if(i==15){
+					microsoftWindow=microsoftWindow|v;
+				}else if(i==16){
+					checkSum=(v<<8);
+				}else if(i==17){
+					checkSum=checkSum|v;
+				}else if(i==18){
+					urgentPointer=(v<<8);
+				}else if(i==19){
+					urgentPointer=urgentPointer|v;
+				}else if(i==20){
+					badOptions=v>>2;
+				}else if(i==21){
+					badOptions=badOptions|(v>>6);
+					data=datagrama.substring(22);
+					break;
+				}
+			}
+			sourcePort = sizeGarantee(dec2bin(sourcePort), 16);
+			destinationPort = sizeGarantee(dec2bin(destinationPort), 16);
+			sequenceNumber = sizeGarantee(dec2bin(sequenceNumber), 32);
+			ackNumber = sizeGarantee(dec2bin(ackNumber), 32);
+			dataOffset = sizeGarantee(dec2bin(dataOffset), 4);
+			reserved = sizeGarantee(dec2bin(reserved), 6);
+			urgFlag = sizeGarantee(dec2bin(urgFlag), 1);
+			ackFlag = sizeGarantee(dec2bin(ackFlag), 1);
+			pshFlag = sizeGarantee(dec2bin(pshFlag), 1);
+			rstFlag = sizeGarantee(dec2bin(rstFlag), 1);
+			finFlag = sizeGarantee(dec2bin(finFlag), 1);
+			synFlag = sizeGarantee(dec2bin(synFlag), 1);
+			microsoftWindow = sizeGarantee(dec2bin(microsoftWindow), 16);
+			checkSum = sizeGarantee(dec2bin(checkSum), 16);
+			urgentPointer = sizeGarantee(dec2bin(urgentPointer), 16);
+			badOptions = sizeGarantee(dec2bin(badOptions), 10);
+
+			// var data = datagrama.substring(dataOffset*32);
 			console.log("Reading datagram_in.pdu:\n\tSource Port: "+sourcePort+"\n\tDestination Port: "+destinationPort+"\n\tSequence number: "+sequenceNumber+"\n\tAck Number: "+ackNumber+
 				"\n\tData Offset: "+dataOffset+"\n\tReserved: "+reserved+"\n\tUrg Flag: "+urgFlag+"\n\tAck Flag: "+ackFlag+"\n\tPsh Flag: "+pshFlag+"\n\tRst Flag: "+rstFlag+
 				"\n\tSyn Flag: "+synFlag+"\n\tFin Flag: "+finFlag+"\n\tWindow Size: "+microsoftWindow+"\n\tChecksum: "+checkSum+"\n\tUrgent Pointer: "+urgentPointer+
-				"\n\tOptions: "+badOptions+"\n\tPadding: "+padding+"\n\tData: "+data);
+				"\n\tOptions: "+badOptions+"\n\tData: "+data);
 
 			if(checkCheckSum(sourcePort+destinationPort+sequenceNumber+ackNumber+dataOffset+reserved+urgFlag+ackFlag+pshFlag+rstFlag+synFlag+finFlag+microsoftWindow+checkSum+urgentPointer+badOptions+padding+data)==0){
 
@@ -643,7 +753,9 @@ function receive(){
 // writeBinFile("batata", 'molecula.pdu');
 // var base64str = readBinFile('molecula.pdu');
 // console.log(base64str);	
-
+while(true){
+forward();
+}
 // convert base64 string back to image 
 
 // writeBinFile("molecula.pdu", "01010101010");
@@ -660,10 +772,12 @@ function receive(){
 // removeObjInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', 0);
 // console.log(arrayOfConections[0]);
 
-while(true){
-	forward();
-	receive();
-}
+// while(true){
+// 	forward();
+// 	receive();
+// }
+
+
 
 // console.log(arrayOfConections[0].receivedAck.push(2));
 // console.log(objectPropInArray(arrayOfConections,'source', 30, 'destination', 40).receivedAck);
