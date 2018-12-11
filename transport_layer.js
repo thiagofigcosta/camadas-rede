@@ -23,20 +23,11 @@ var dec2bin = function (num) {
 };
 
 function readBinFile(file) {
-    var fs = require("fs");
-    var bitmap = fs.readFileSync(file, 'ascii');
-    // console.log("Leu: "+bitmap)
-    // console.log("Transformou: "+Buffer.from(bitmap, 'base64').toString('ascii'));
-    return Buffer.from(bitmap, 'base64').toString('ascii');
+    return readStrFile(file);
 }
 
 function writeBinFile(file, base64str) {
-    var fs = require("fs");
-    while (fs.existsSync(file)) {
-
-	}
-	// console.log("Escreveu: "+Buffer.from(base64str).toString('base64'));
-    fs.writeFileSync(file, Buffer.from(base64str).toString('base64'));
+    writeStrFile(file, base64str);
 }
 
 function readStrFile(fileName) {
@@ -340,7 +331,7 @@ function forward(){
 							setPropInArray(arrayOfConections,'source', sourcePort, 'destination', destinationPort, 'windowAck', buffer.windowAck.map((a, i) => a + [1,1,1][i]));	
 
 							if(sendData.length<=maximumSegmentSize){
-								console.log("2");
+								
 								datagramaSend = new Datagram(applicationZap, status=='naoconfirmado',
 											sourcePort, 
 											destinationPort, 
@@ -356,7 +347,7 @@ function forward(){
 											0, // urgent pointer não usado
 											sendData
 										);
-								console.log("2");
+								
 								setDataInArray(arrayOfConections,'source', sourcePort, 'destination', destinationPort, 'data', {'conteudo': datagramaSend, 'status': status});
 							} else {
 								for(i=0; i<sendData.length/maximumSegmentSize; i++){
@@ -414,7 +405,7 @@ function forward(){
 				}
 
 				if(arrayOfConections[0]!=undefined){
-					console.log(arrayOfConections[0].data[0]);	
+					console.log(arrayOfConections[0]);	
 				}
 
 			}

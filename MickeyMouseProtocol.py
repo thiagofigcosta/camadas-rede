@@ -119,6 +119,10 @@ def controller(myip,ip,port):
 		file.write(data)
 		file.close()
 
+		file = open("application_ips.zap", "wb")
+		file.write(myip+":"+str(port)+"-"+ip+":"+str(port))
+		file.close()
+
 		while True:
 			try:
 				file = open("message_in.pdu", "r")
