@@ -33,7 +33,7 @@ function readBinFile(file) {
 function writeBinFile(file, base64str) {
     var fs = require("fs");
     while (fs.existsSync(file)) {
-    	removeFile(file);
+
 	}
 	// console.log("Escreveu: "+Buffer.from(base64str).toString('base64'));
     fs.writeFileSync(file, Buffer.from(base64str).toString('base64'));
@@ -48,7 +48,7 @@ function readStrFile(fileName) {
 function writeStrFile(fileName, string){
 	var fs = require('fs');
 	while (fs.existsSync(fileName)) {
-		removeFile(fileName);
+
 	}
 	fs.writeFile(fileName, string);
 	// var wstream = fs.createWriteStream(fileName, 'base64');
@@ -251,11 +251,10 @@ var arrayOfConections = [];
 
 function forward(){
 	var fs = require('fs');
-	while(true){
 		if (fs.existsSync("message_out.pdu") && fs.existsSync("application_ips.zap")) {
 		    var applicationZap = readStrFile("application_ips.zap");
 		    removeFile("application_ips.zap");
-		    var dataDeAniversario = readBinFile("message_out.pdu");
+		    var dataDeAniversario = readStrFile("message_out.pdu");
 		    removeFile("message_out.pdu");
 			var sourceInfo = applicationZap.split("-")[0];
 			var destinationInfo = applicationZap.split("-")[1];
@@ -421,8 +420,6 @@ function forward(){
 			}
 
 		}
-		
-	}
 }
 
 function checkCheckSum(allConcat){
@@ -445,7 +442,6 @@ function checkCheckSum(allConcat){
 
 function receive(){
 	var fs = require('fs');
-	while(true){
 		if (fs.existsSync("datagram_in.pdu")) {
 		    var datagrama = readBinFile("datagram_in.pdu");
 		    removeFile("datagram_in.pdu");
@@ -603,50 +599,49 @@ function receive(){
 
 			}
 		}
-	}
 }
 
 
-var datagramaSend = new Datagram("192.168.65.7:30-192.168.65.8:40", true,
-											'30', 
-											'40', 
-											'0', // sequence number
-											0, // ackNumber não será utilizado nesse caso
-											0, // reserved sempre nulo
-											0, // urgent pointer não usado
-											0, // não é um ACK
-											0, // indica o final de uma segmentação da data
-											0, // não reseta conexão
-											0, // tenta sincronizar
-											0, // não indica que acabou conexão
-											0, // urgent pointer não usado
-											"0101011010101010"
-										);
+// var datagramaSend = new Datagram("192.168.65.7:30-192.168.65.8:40", true,
+// 											'30', 
+// 											'40', 
+// 											'0', // sequence number
+// 											0, // ackNumber não será utilizado nesse caso
+// 											0, // reserved sempre nulo
+// 											0, // urgent pointer não usado
+// 											0, // não é um ACK
+// 											0, // indica o final de uma segmentação da data
+// 											0, // não reseta conexão
+// 											0, // tenta sincronizar
+// 											0, // não indica que acabou conexão
+// 											0, // urgent pointer não usado
+// 											"0101011010101010"
+// 										);
 
- var datagrama = readBinFile("datagram_out.pdu");
-		    var sourcePort = bin2dec(datagrama.substring(0,16));
-			var sourcePort = datagrama.substring(0,16);
-			var destinationPort = datagrama.substring(16,32);
-			var sequenceNumber = datagrama.substring(32,64);
-			var ackNumber = datagrama.substring(64,96);
-			var dataOffset = datagrama.substring(96,100);
-			var reserved = datagrama.substring(100,106);
-			var urgFlag = datagrama.substring(106,107);
-			var ackFlag = datagrama.substring(107,108);
-			var pshFlag = datagrama.substring(108,109);
-			var rstFlag = datagrama.substring(109,110);
-			var synFlag = datagrama.substring(110,111);
-			var finFlag = datagrama.substring(111,112);
-			var microsoftWindow = datagrama.substring(112,128);
-			var checkSum = datagrama.substring(128,144);
-			var urgentPointer = datagrama.substring(144,160);
-			var badOptions = datagrama.substring(160,160+dec2bin(maximumSegmentSize).length);
-			var padding = datagrama.substring(160+dec2bin(maximumSegmentSize).length, dataOffset*32);
-			var data = datagrama.substring(dataOffset*32);
-			console.log("Reading datagram_in.pdu\n\tSource Port: "+sourcePort+"\n\tDestination Port: "+destinationPort+"\n\tSequence number: "+sequenceNumber+"\n\tAck Number: "+ackNumber+
-				"\n\tData Offset: "+dataOffset+"\n\tReserved: "+reserved+"\n\tUrg Flag: "+urgFlag+"\n\tAck Flag: "+ackFlag+"\n\tPsh Flag: "+pshFlag+"\n\tRst Flag: "+rstFlag+
-				"\n\tSyn Flag: "+synFlag+"\n\tFin Flag: "+finFlag+"\n\tWindow Size: "+microsoftWindow+"\n\tChecksum: "+checkSum+"\n\tUrgent Pointer: "+urgentPointer+
-				"\n\tOptions: "+badOptions+"\n\tPadding: "+padding+"\n\tData: "+data);
+//  var datagrama = readBinFile("datagram_out.pdu");
+// 		    var sourcePort = bin2dec(datagrama.substring(0,16));
+// 			var sourcePort = datagrama.substring(0,16);
+// 			var destinationPort = datagrama.substring(16,32);
+// 			var sequenceNumber = datagrama.substring(32,64);
+// 			var ackNumber = datagrama.substring(64,96);
+// 			var dataOffset = datagrama.substring(96,100);
+// 			var reserved = datagrama.substring(100,106);
+// 			var urgFlag = datagrama.substring(106,107);
+// 			var ackFlag = datagrama.substring(107,108);
+// 			var pshFlag = datagrama.substring(108,109);
+// 			var rstFlag = datagrama.substring(109,110);
+// 			var synFlag = datagrama.substring(110,111);
+// 			var finFlag = datagrama.substring(111,112);
+// 			var microsoftWindow = datagrama.substring(112,128);
+// 			var checkSum = datagrama.substring(128,144);
+// 			var urgentPointer = datagrama.substring(144,160);
+// 			var badOptions = datagrama.substring(160,160+dec2bin(maximumSegmentSize).length);
+// 			var padding = datagrama.substring(160+dec2bin(maximumSegmentSize).length, dataOffset*32);
+// 			var data = datagrama.substring(dataOffset*32);
+// 			console.log("Reading datagram_in.pdu\n\tSource Port: "+sourcePort+"\n\tDestination Port: "+destinationPort+"\n\tSequence number: "+sequenceNumber+"\n\tAck Number: "+ackNumber+
+// 				"\n\tData Offset: "+dataOffset+"\n\tReserved: "+reserved+"\n\tUrg Flag: "+urgFlag+"\n\tAck Flag: "+ackFlag+"\n\tPsh Flag: "+pshFlag+"\n\tRst Flag: "+rstFlag+
+// 				"\n\tSyn Flag: "+synFlag+"\n\tFin Flag: "+finFlag+"\n\tWindow Size: "+microsoftWindow+"\n\tChecksum: "+checkSum+"\n\tUrgent Pointer: "+urgentPointer+
+// 				"\n\tOptions: "+badOptions+"\n\tPadding: "+padding+"\n\tData: "+data);
 
 //  removeFile("transport_ips.zap");
 //  removeFile("datagram_out.pdu");
@@ -663,18 +658,21 @@ var datagramaSend = new Datagram("192.168.65.7:30-192.168.65.8:40", true,
 // writeBinFile("molecula.pdu", "01010101010");
 // console.log(readBinFile("molecula.pdu"));
 
-// writeBinFile("message_out.pdu", "101011101100011111100001111100001010101");
+  // writeBinFile("message_out.pdu", "101011101100011111100001111100001010101");
 
-arrayOfConections.push({'source': 30, 'destination': 40, 'expectedAck': 1, 'data': [{'conteudo': datagramaSend, 'status': 'pendente'}]});
+// arrayOfConections.push({'source': 30, 'destination': 40, 'expectedAck': 1, 'data': [{'conteudo': datagramaSend, 'status': 'pendente'}]});
 // console.log(arrayOfConections[0].data[0].conteudo.microsoftWindow);
-var buffer = objectPropInArray(arrayOfConections,'source', 30, 'destination', 40);
+// var buffer = objectPropInArray(arrayOfConections,'source', 30, 'destination', 40);
 // var teste = {'conteudo': "01010101", 'status': 'pendente'};
- setDataInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', {'conteudo': datagramaSend, 'status': 'pendente'})
-console.log(arrayOfConections[0]);
-removeObjInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', 0);
-console.log(arrayOfConections[0]);
+//  setDataInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', {'conteudo': datagramaSend, 'status': 'pendente'})
+// console.log(arrayOfConections[0]);
+// removeObjInArray(arrayOfConections,'source', 30, 'destination', 40, 'data', 0);
+// console.log(arrayOfConections[0]);
 
-// forward();
+while(true){
+	forward();
+	receive();
+}
 
 // console.log(arrayOfConections[0].receivedAck.push(2));
 // console.log(objectPropInArray(arrayOfConections,'source', 30, 'destination', 40).receivedAck);
